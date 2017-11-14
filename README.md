@@ -36,7 +36,9 @@ Since todays state-of-the-art machine learning is mostly done in either Python o
 ### Use a model, trained in Python
 Python is an interpreted, high-level, multipurpose programming language with a simple and easy to learn syntax, which is one of the contributing factors to Pythons recent and continuous success. Python has a solid claim to being the fastest-growing major programming language. You can see on [Stack Overflow Trends](https://insights.stackoverflow.com/trends?tags=python%2Cjava%2Cr%2Cc%23%2Cjavascript%2Cscala&utm_source=so-owned&utm_medium=blog&utm_campaign=gen-blog&utm_content=blog-link&utm_term=incredible-growth-python) that Python has been growing rapidly in the last few years:
 
-> ![StackOverflow Pythons Trend graphic](https://github.com/IndustrialML/SmartApplicationDoku/images/stackoverflowTrends.png)
+> ![StackOverflow Pythons Trend graphic](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/stackoverflowTrends.png)
+
+> ![StackOverflow Pythons trend graphic](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/stackoverflowTrends.png)
 
 When we focus on countries that are classified as high-income by the World Bank, the growth of Python is even larger than it might appear from tools like Stack Overflow Trends, or in other rankings that consider global software development. In June 2017, Python even claimed the title for the most visited tag on Stack Overflow within high-income nations. 
 
@@ -44,7 +46,9 @@ This might correlate with the strong upward trend of Machine Learning and Deep L
 
 When querying [indeed.com](https://www.indeed.com/jobtrends/q-python-and-(%22machine-learning%22-or-%22data-science%22)-q-R-and-(%22machine-learning%22-or-%22data-science%22)-q-Java-and-(%22machine-learning%22-or-%22data-science%22)-q-scala-and-(%22machine-learning%22-or-%22data-science%22).html) for jobs in machine learning / data science, we can see that Python is the language with highest demand:
 
-> ![indeed trends graphic](https://github.com/IndustrialML/SmartApplicationDoku/images/mlTrend.png)
+> ![indeed trends graphic](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/mlTrends.png)
+
+> ![Indeed trends graphic](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/mlTrends.png)
 
 So now, that we know that Python is super cool and used all over the place, lets dive in to how we can use our machine learning algorithms, that we trained in Python, in Java.
 
