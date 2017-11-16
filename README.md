@@ -243,8 +243,6 @@ For a full running example with different `Tensorflow` aswell as `Keras` and `Es
 #### Model as a Service
 //todo: *docu, (dis)advantages, (links to) code and/or pictures*
 
-#### Model as a Service
-//todo: *docu, (dis)advantages, (links to) code and/or pictures*
 
 
 
