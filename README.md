@@ -118,16 +118,137 @@ So now, that we know that Python is great and used all over the place, lets dive
 I have documented my work in more detail [here](https://github.com/IndustrialML/Python2Java) and if you are interested you are more than welcome to read the whole thing. In the following I will link references whenever appropriate. 
 
 #### Saving and exporting a model
-Before we can start using a model, in whatever way, we will have to train one and somehow export it, so that we can use it at a later point in time. As this will be different for each Python framework, I will supply you with a few different options. The main difference between models is going to be, whether they implement a deep learning or a "usual" machine learning algorithm. For the sake of demonstration, I will show you how to export a Neural Network and an "oldschool" Random Forest, that solve the classification problem for the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset.
+Before we can start using a model, in whatever way, we will have to train one and somehow export it, so that we can use it at a later point in time. As this will be different for each Python framework, I will supply you with a few different options. The main difference between models is going to be, whether they implement a deep learning or a "usual" machine learning algorithm. For the sake of demonstration, I trained and exported a Neural Network and a Random Forest, that solve the classification problem for the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset, the full examples can be found [here](https://github.com/IndustrialML/Python2Java/tree/master/Maschine%20Learning).
 ##### Neural Network
-//todo: *docu, (dis)advantages, (links to) code and/or pictures*
+As `Tensorflow` emerges as by far the most popular deep learning framework, I will join the majority. The easiest way to save a trained model in `tensorflow` is, to use the `tensorflow.train.Saver()` class, provided directly from `tensorflow`. An example workflow is shown [here](https://github.com/IndustrialML/Python2Java/tree/master/Maschine%20Learning/NeuralNetwork/Tensorflow/MNISTClassifier#saver), however as this method does not save the model platform independent, but rather only to re-import it into Python later, this is not what we are looking for. Another option would be to make use of the [JPMML-Tensorflow](https://github.com/jpmml/jpmml-tensorflow) project, to parse the trained model to the [PMML](http://dmg.org/pmml/v4-3/GeneralStructure.html) standard format, and use the [JPMMLEvaluator](https://github.com/jpmml/jpmml-evaluator) to read out the PMML file and recreate the model in Java. This option would be somewhat platform independent, but heavily relies on the third party `JPMML` project and the import would be restricted to Java only.
+
+Hence, I am glady proposing a third method, which limits itself to only use the `Tensorflow` framework for the transfer and offers greater platform independence, even though i will only present you with a Java example. The point of matter here is, that `Tensorflow` officially supports different API’s for different languages. According to the official [documentation](https://www.tensorflow.org/api_docs/), you can definitely use C++ and Go, aswell as some other languages with weaker support, like Scala or Ruby. This method will use the `tensorflow.saved_model` class, for which an official introduction can be found [here](https://www.tensorflow.org/programmers_guide/saved_model#apis_to_build_and_load_a_savedmodel). 
+
+The export of a neural network, built with Tensorflow, can be easily accomplished with:
+```python
+    export_dir = "./export"
+    builder = tf.saved_model.builder.SavedModelBuilder(export_dir)
+    builder.add_meta_graph_and_variables(sess, 
+            [tf.saved_model.tag_constants.SERVING])
+    builder.save()
+```
+The last line of codes, executes the export and creates files, representing the neural network, inside the "export" directory. It creates the architecture describing "saved_model.pb" file, and another subdirectory, containing all informations about the weights and biases.
+
+Now, we could conclude this section without further ado, but often it is advisable to add a `Signature` to the `SavedModel`, describing the set of inputs and outputs of a model. This step is important, because we will need to know the exact names of the input and output structures, in order to beeing able to use the model for prediction in Java, as we will show later. We can add a signature by modifying the code above:
+
+```python
+    signature = tf.saved_model.signature_def_utils.build_signature_def(
+        inputs={'input': tf.saved_model.utils.build_tensor_info(x),
+                'dropout': tf.saved_model.utils.build_tensor_info(dKeep)},
+        outputs={'output': tf.saved_model.utils.build_tensor_info(y)},
+    )
+    signatureMap = { tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: signature }
+
+    builder = tf.saved_model.builder.SavedModelBuilder(export_dir)
+    builder.add_meta_graph_and_variables(sess, 
+		[tf.saved_model.tag_constants.SERVING], 
+		signature_def_map=signatureMap)
+    builder.save()
+```
+Note, that `x` is the `placeholder` for the input layer, `dKeep` is the `placeholder` for the dropout rate, and `y` is the output layer of the neural network.
+
+
+This signature can then be inspected, using the [SavedModel CLI](https://www.tensorflow.org/programmers_guide/saved_model#cli_to_inspect_and_execute_savedmodel). For our example neural net, the output can look as following: 
+
+> ![Image of SavedModel CLI Output](https://github.com/IndustrialML/Python2Java/blob/master/Maschine%20Learning/NeuralNetwork/Tensorflow/MNISTClassifier/Feed%20Forward%20NN/SavedModel/SavedModelCLI_example.png)
+
+For more information and a full work through, please refer to the Python2Java repository [here](https://github.com/IndustrialML/Python2Java/tree/master/Maschine%20Learning/NeuralNetwork/Tensorflow/MNISTClassifier).
+
+As mentioned earlier, performing the export is going to be dependent on which framework you are using to train your model. This introduction covered only plain `Tensorflow`, if you want to, or have already, build a neural network with  `Tensorflow.Estimator` or `Keras` with `Tensorflow` backend, I have covered these in the Python2Java repository aswell. Please follow the link to the documentation for [Estimator](https://github.com/IndustrialML/Python2Java/tree/master/Maschine%20Learning/NeuralNetwork/Estimator/MNISTClassifier) or [Keras](https://github.com/IndustrialML/Python2Java/tree/master/Maschine%20Learning/NeuralNetwork/Keras).
+
 ##### Random Forest
-//todo: *docu, (dis)advantages, (links to) code and/or pictures*
+Just like `Tensorflow` seems to be the titan for building neural networks in Python, `scikit-learn` (or short: `sklearn`)  looks to be its counterpart for basically everything else in Python's machine learning. Therefore, I will now show you how to export an `sklearn.ensemble.RandomForestClassifier`.
+
+If you are only looking to save your model, to re-import it into Python at a later point in time, for example to use it to provide a simple RESTfull API, this is a very easy task. Most of the `sklearn` classifiers are "pickleable"(if that is a word), which means that you can simply save your whole classifier to a ".pkl" file, using Pythons build in serializing and de-serializing module `pickle`. In the specific case of an `sklearn` classifier, it may be more interesting to use  `joblib`’s replacement of `pickle`, which is more efficient on objects that carry large `numpy` arrays. This can look like the following:
+```python
+	clf = RandomForestClassifier(...)
+	clf.fit(features, labels)
+	joblib.dump(clf, "export.pkl")
+```
+And that's it, now you have saved your whole `RandomForestClassifier` in the "export.pkl" file inside your working directory. 
+
+Well that was boring, but wait a moment, remember that `pickle` is a Python’s built in tool, which means that it definitly is specific to the language of Python. For *Model as a Service*, we will need a platform independent format, that we can read into Java. Sadly `sklearn` does not offer convenient API’s in other languages, like `Tensorflow` does. Thus, we will need to come back to the `JPMML` project, that was mentioned earlier. They characterize their project as a set of "PMML producer and consumer libraries for the Java/JVM platform", which includes the [sklearn2pmml](https://github.com/jpmml/sklearn2pmml) module. This is a Python library for converting Scikit-Learn pipelines to PMML. Note, that we will later be using the [jpmml-evaluator](https://github.com/jpmml/jpmml-evaluator), to load the created PMML file into Java. 
+
+Converting your `sklearn` model into a representational PMML file takes three steps:
+1. Build a `PMMLPipeline` around your classifier:
+```python
+	clf = RandomForestClassifier(...)
+	mnist_pipeline = PMMLPipeline([
+		("classifier", clf)
+	])
+```
+2. Train the model inside the pipeline, therefore you need to call the fit() function on the pipeline, not the original classifier:
+```python
+	mnist_pipeline.fit(features, labels)
+```
+3. Parse the Python `PMMLPipeline` object to an actual PMML file:
+```python
+	sklearn2pmml(mnist_pipeline, "RandomForest.pmml")
+```
+For more information and a full example, please refer to the [Python2Java](https://github.com/IndustrialML/Python2Java/tree/master/Maschine%20Learning/RandomForest/MaaS) repository.
+
 
 #### Inference as a Service
-//todo: *docu, (dis)advantages, (links to) code and/or pictures*
+Before we begin, let me remind you what we understand under the term of Inference as a Service: *The machine learning model is supposed to be deployed from Python/R and an inference service is supposed to be made available as a RESTful API*.
+
+In order to achieve this, I will be using the convenient [flask](http://flask.pocoo.org/) Python microframework. For now, I will illustrate the general structure of a `flask` application and later on show the different implementations of loading the pretrained model and making a prediction with either `Tensorflow` or `Sklearn`.
+
+1. At the very beginning, you will need to create your `flask` application:
+```python
+	app = Flask(__name__)
+```
+2. Reload the pretrained model (model dependend step)
+3. Define the route of your REST endpoint, by adding a function decorator:
+```python
+	@app.route("/predict", methods=['POST'])
+	def predict():
+    	picArray = request.get_json() #get request json Array
+    	reshaped_Array = reshapePic(picArray) #reshape the Array to your needs
+        return predictPicture(reshaped_Array) #model dependend step
+```
+
+##### Neural Network
+Let's assume, that we have saved a trained `Tensorflow` model, like the one shown earlier, with one input tensor (input:0), one output tensor (output:0) and a dropout rate tensor (dropoutRate:0). Now the import will look like the following: 
+```python
+	sess = tf.Session()
+    import_dir = "../path/to/savedmodel/directory"
+    tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING], import_dir)
+    graph = tf.get_default_graph()
+```
+And with this, the whole model that we saved earlier, will be recreated into the new Tensorflow `Session`. Notice that we are using the `[tf.saved_model.tag_constants.SERVING]` again, to specify which meta graph inside the `SavedModel` to load.
+
+Do you remember how i pointed our earlier, that it is important for us to know the exact names of these tensors? Well, now we will need to grab these tensors by name from the `Graph`, in order to beeing able to make predictions and fetch the result:
+```python
+	x = graph.get_tensor_by_name("input:0")
+    dKeep = graph.get_tensor_by_name("dropoutRate:0")
+    y = graph.get_tensor_by_name("output:0")
+``` 
+After we can access these tensors, we can start actually using our model:
+```python
+	def predictPicture(picArray):
+	    score = sess.run(y, feed_dict={x: picArray, dKeep: 1.0})
+        return np.argmax(score)
+```
+For a full running example with different `Tensorflow` aswell as `Keras` and `Estimator` models, please refer to [this](https://github.com/IndustrialML/Python2Java/tree/master/Maschine%20Learning/NeuralNetwork/Serving).
+
+**Appendix:** If you are looking to serve a model for production that is going to be retrained frequently, may require serving multiple versions simultaneously and/or is expected to receive an extremely high amount of requests, you might want to get yourself into Tensorflow Serving instead of using Flask. This is a separate and very mighty module of Tensorflow, specifically created to serve Tensorflow models. Making a proper request to the Tensorflow Server from a different technologie will require you converting your inputs into a fitting protobuffer format and sending that per RPC. For Python, Tensorflow offers a working API, which does all the transofmations for you. A small example can be found [here](https://github.com/IndustrialML/experiments/tree/master/Tensorflow_Serving).
+
+##### Random Forest
+
 #### Model as a Service
 //todo: *docu, (dis)advantages, (links to) code and/or pictures*
+
+#### Model as a Service
+//todo: *docu, (dis)advantages, (links to) code and/or pictures*
+
+
+
+
 
 ### Comparison and benchmark analysis
 //todo: *final summary+comparison and benchmark results*
