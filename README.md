@@ -429,6 +429,12 @@ Now finally, this will be the last time, i will advice you to read my full docum
 
 ![Sequential Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialTable.png)
 
+![Sequential Benchmarktest graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialGraphs.png)
+
+![Concurrent Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/ConcurrentTable.png)
+
+![Concurrent Benchmarktest graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/ConcurrentGraphs.png)
+
 ## Glossar
 * API
 * Decision Tree
