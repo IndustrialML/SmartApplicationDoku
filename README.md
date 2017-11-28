@@ -426,7 +426,8 @@ Now finally, this will be the last time, i will advice you to read my full docum
 
 
 ### Comparison and benchmark analysis
-//todo: *final summary+comparison and benchmark results*
+
+![Sequential Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialTable.png)
 
 ## Glossar
 * API
