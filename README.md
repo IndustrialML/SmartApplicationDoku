@@ -426,7 +426,7 @@ Now finally, this will be the last time, i will advice you to read my full docum
 
 
 ### Comparison and benchmark analysis
-Our initial goal with this project was to get a feeling for the possible solutions to transfer a machine learning model between a data analytics technology like R/Python and a software engineering like Java. To conclude this section, we wanted to find out how the different solutions perform and therefore ran a benchmark test for every evaluated solution. The source code for the test can be found [here](https://github.com/IndustrialML/mlbenchmark). 
+Our initial goal with this project was to get a feeling for the possible solutions to transfer a machine learning model between a data analytics technology like R/Python and a software engineering like Java. To conclude this section, we wanted to find out how the different solutions perform and therefore ran benchmark tests for every evaluated solution. The source code for the test can be found [here](https://github.com/IndustrialML/mlbenchmark). 
 
 We tried to get comparable results, by testing on the same problem. Our example case was training a Random Forest on the MNIST dataset. For every solution we created three models(if possible):
 * An **empty** model: This is not actually a Random Forest model, but rather just returns a 0 for every request. With this we wanted to identify the time that was needed just for the REST call itself.
@@ -440,6 +440,9 @@ For the *Inference as a Service* solutions, we ran the benchmark test with 2000 
 ![Concurrent Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/ConcurrentTable.png)
 
 ![Concurrent Benchmarktest graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/ConcurrentGraphs.png)
+
+All values were measured on an Azure [E2S_V3 Standard](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/images/0_createVM_3.PNG) instance running a Microsoft Machine Learning Server 9.2.1 on Ubuntu 16.04 VM. More information about the VM setup can be found [here](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Configure_Azure_Linux_VM.md).
+Notice that the values for the RESTful API of the Microsoft Machine Learning Server standard and realtime are not trustworthy yet and those solutions are still in process.
 
 ## Glossar
 * API
