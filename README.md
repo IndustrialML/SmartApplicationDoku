@@ -447,6 +447,11 @@ Notice that the values for the RESTful API of the Microsoft Machine Learning Ser
 
 
 We ran another benchmark test for the *Model as a Service* solution of a Random Forest, to roughly compare the performances. The test results provided were evaluated, using a Python's `sklearn` Random Forest that was parsed to PMML (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)) and later consumed in Java, using the JPMML-Evaluator library (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)). You can view the source code [here](https://github.com/IndustrialML/Python2Java/tree/master/MaschineLearning4J/src/main/java/RandomForest).
+
+Note that the results are measured in miliseconds this time, so the performance is significantly faster (as expected):
+
+![Java Benchmark results](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/JavaTable.png)
+
 ## Glossar
 * API
 * Decision Tree
