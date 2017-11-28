@@ -35,7 +35,89 @@ For a detailed introduction the manual ["An Introduction to R"](https://cran.r-p
 We recommend to install the latest free open source [R software](https://cran.r-project.org/) and integrate a development environment (IDE) for R like [RStudio](https://www.rstudio.com/).
 
 #### Inference as a Service
-//todo: *docu, (dis)advantages, (links to) code and/or pictures*
+
+By understanding inference as a service as deploying the machine learning model from R and making an inference service available as a REST API, we take first the MNIST data set of handwritten digits and train different models in R by using random forest. 
+
+<img align="right" width="200" height="200" src="images/plot_mnist.jpg">
+
+There are three models involved in the prediction:
+* **empty model**: This model does not uses the input data and predicts always the number 0.
+* **small model**: This model does use the input data. It was trained with random forest by using 50 trees and 60000 observations.
+* **large model**: This model does use the input data. It was trained with random forest by using 500 trees and 60000 observations.
+
+If you are search for tools which deploys R code as REST API in the world wide web there are several tools. Every tool promise to be the best with only a few steps. We choose the following:
+
+* [Plumber](https://github.com/IndustrialML/R_RESTApi/tree/master/plumber)
+* [OpenCPU](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU)
+* //todo Microsoft Machine Learning Server
+
+##### Plumber
+[Plumber](https://cran.r-project.org/web/packages/plumber/plumber.pdf) is an R package with is free available. Plumber is hosted on CRAN, so you can download and install the latest stable version and all of its dependencies by running in R:
+
+```{r}
+install.packages("plumber")
+library(plumber)
+```
+> ### :information_source: Package plumber (version 0.4.2)
+> The package plumber (version 0.4.2) depends on R (>= 3.0.0) and imports R6 (>= 2.0.0), stringi (>= 0.3.0), jsonlite (>= 0.9.16), httpuv (>= 1.2.3) and crayon (1.3.4).
+
+For using plumber as REST API service, one have to use the following structure:
+1. There should be one R script which deploys some functions with plumber. We call it *deploy_rf_pkg.R*. It has to look like this
+
+* for GET 
+```{r}
+#* @get /predict
+function.get<- function(){
+    return( "Hello, Test" )
+}
+```
+* for POST 
+```{r}
+#* @post /predictsmallpkg
+function.post <- function(req){
+    json <- req$postBody # access the json directly
+    list <- fromJSON(json)
+    result <- make_something(list)
+    return(as.numeric(as.character(result))) #returns a numeric value
+}
+```
+
+2. There should be one R script which install the needed R packages and run the script *deploy_rf_pkg.R* on the server. We call this script *install_and_runport.R*
+
+```{r}
+# load packages
+library(plumber)
+library(...)
+
+r <- plumb("deploy_rf_pkg.R")
+r$run(port=8080, host='0.0.0.0')
+```
+To use the R script in a Docker container one have to state `host='0.0.0.0'`.
+
+For more information and a full example, we refer to [plumber in R_RESTApi](https://github.com/IndustrialML/R_RESTApi/tree/master/plumber) and its docs.
+
+If you might guess plumber is not the simplest way to make a prediction available. It uses only R code. On the one hand, if one want to make the input and output available as a JSON format, one have to implement this by hand. On the other hand, this is a great way for searching problems or other connecting issues. 
+
+##### OpenCPU
+
+[OpenCPU](https://www.opencpu.org/) is an open source system for embedded scientific computing and reproducible research which was developed by Jeroen Ooms who is a postdoc at University of California Berkeley. It uses R code only in R packages. Therefore, if not common R packages are used, own R packages have to be created. The procedure for this have we described in [*Create_Rpackage.md*](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Create_RPackage.md).
+
+There are two ways to install OpenCPU. First is to have an Ubuntu server and install it directly or, second, you uses Docker and install the Ubuntu environment and the OpenCPU in an container.
+
+We choose the second way, because it is available on every system fast and do not need any complicated installation e.g. on Windows. If you have all R code available in R packages, it needs no more specific code but you have to install Docker. That's it! So easy is OpenCPU.
+
+O.k. - wait, this is one aspect. We do not forget making requests. Making request is in return more complicated than other tools, but feasible. Other than normally the status code for OpenCPU is **"201 Created"** which means the request has been fulfilled and has resulted in one or more new resources being created. By setting the output equal to a JSON format one can avoid this circumstances. It looks like follows:
+
+* Local:
+http://localhost:port_number/ocpu/library/package_name/R/package_function/json
+
+Our full example can be seen in [here](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU).
+
+##### //todo Microsoft Machine Learning Server
+
+
+
+
 #### Model as a Service
 We show now how we transferred one whole machine learning (ML) model from R to Java, to execute predictions directly in Java. We choose as ML model the "old-school" Random Forest, that solve the classification problem for the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) data set. In the MNIST data set one image has 28*28 = 784 pixels with values between 0 and 255. The set is organized row-wise. 
 
