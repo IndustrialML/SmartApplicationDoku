@@ -426,7 +426,14 @@ Now finally, this will be the last time, i will advice you to read my full docum
 
 
 ### Comparison and benchmark analysis
+Our initial goal with this project was to get a feeling for the possible solutions to transfer a machine learning model between a data analytics technology like R/Python and a software engineering like Java. To conclude this section, we wanted to find out how the different solutions perform and therefore ran a benchmark test for every evaluated solution. The source code for the test can be found [here](https://github.com/IndustrialML/mlbenchmark). 
 
+We tried to get comparable results, by testing on the same problem. Our example case was training a Random Forest on the MNIST dataset. For every solution we created three models(if possible):
+* An **empty** model: This is not actually a Random Forest model, but rather just returns a 0 for every request. With this we wanted to identify the time that was needed just for the REST call itself.
+* A **small** model: A Random Forest with an ensemble of 50 Decision Trees
+* A **large** model: A Random Forest with an ensemble of 500 Decision Trees
+
+For the *Inference as a Service* solutions, we ran the benchmark test with 2000 prediction requests each:
 ![Sequential Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialTable.png)
 
 ![Sequential Benchmarktest graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialGraphs.png)
