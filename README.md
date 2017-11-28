@@ -433,8 +433,7 @@ We tried to get comparable results, by testing on the same problem. Our example 
 * A **small** model: A Random Forest with an ensemble of 50 Decision Trees
 * A **large** model: A Random Forest with an ensemble of 500 Decision Trees
 
-For the *Inference as a Service* solutions, we ran the benchmark test with 2000 prediction requests each:
-![Sequential Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialTable.png)
+For the *Inference as a Service* solutions, we ran the benchmark test with 2000 prediction requests each. All of the following statistical values are measured in seconds:![Sequential Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialTable.png)
 
 ![Sequential Benchmarktest graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialGraphs.png)
 
