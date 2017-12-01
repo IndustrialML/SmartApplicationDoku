@@ -49,7 +49,7 @@ If you are search for tools which deploys R code as REST API in the world wide w
 
 * [Plumber](https://github.com/IndustrialML/R_RESTApi/tree/master/plumber)
 * [OpenCPU](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU)
-* //todo Microsoft Machine Learning Server
+* [Microsoft Machine Learning Server](https://github.com/IndustrialML/R_RESTApi/tree/master/MS_MLserver)
 
 ##### Plumber
 [Plumber](https://cran.r-project.org/web/packages/plumber/plumber.pdf) is an R package with is free available. Plumber is hosted on CRAN, so you can download and install the latest stable version and all of its dependencies by running in R:
@@ -113,9 +113,18 @@ http://localhost:port_number/ocpu/library/package_name/R/package_function/json
 
 Our full example can be seen in [here](https://github.com/IndustrialML/R_RESTApi/tree/master/openCPU).
 
-##### //todo Microsoft Machine Learning Server
+##### Microsoft Machine Learning Server
 
+Microsoft offers a framework for operationalizing Machine Learning Models trained in R or Python, which is called **Microsoft Machine Learning Server**. The framework includes "a collection of R packages, Python packages, interpreters, and infrastructure for developing and deploying distributed R and Python-based machine learning and data science solutions on a range of platforms across on-premises and cloud configurations". We were of course curious to see what this well-praised service had to offer.         
 
+As opposed to the other solutions discussed here, this framework is licensed and hence in general not available for free. 
+However, if you want to check it out, you can just [create a free Azure account](https://azure.microsoft.com/de-de/offers/ms-azr-0044p/) and assemble a VM with Machine Learning Server installed and voilà, there you are having a free trial version for 30 days including about 190 CHF free credit - an opportunity perfect for our purpose!
+
+We checked out their possibilities to provide inference as a service for trained R models using [this](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Configure_Azure_Linux_VM.md) VM on Azure.
+They provide two kinds of web services for doing this: the standard and the realtime web service. The standard web services offer scoring of arbitrary Python or R code and models. The realtime web services are claimed to be even faster than the standard ones (if this is true you will see further below in this README), but you can only use functions of MS's propriety R packages (RevoScaleR and MicrosoftML) to fit models. 
+
+There is plenty of documentation from MS to create these web services, in fact almost too much information and there is a high chance that you end up having a gazillion open tabs and get completely lost when navigating through their documentation. Nevertheless, we managed to condense this information to a single documentation file and two R Scripts. :v: 
+The documentation (including detailed setup information and uncovering some dirty details) is given [here](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/MLserver.md), and the corresponding R code is available [here](https://github.com/IndustrialML/R_RESTApi/tree/master/MS_MLserver). 
 
 
 #### Model as a Service
