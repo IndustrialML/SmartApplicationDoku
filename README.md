@@ -440,11 +440,15 @@ Now finally, this will be the last time, i will advice you to read my full docum
 Our initial goal with this project was to get a feeling for the possible solutions to transfer a machine learning model between a data analytics technology like R/Python and a software engineering like Java. To conclude this section, we wanted to find out how the different solutions perform and therefore ran benchmark tests for every evaluated solution. The source code for the test can be found [here](https://github.com/IndustrialML/mlbenchmark). 
 
 We tried to get comparable results, by testing on the same problem. Our example case was training a Random Forest on the MNIST dataset. For every solution we created three models(if possible):
-* An **empty** model: This is not actually a Random Forest model, but rather just returns a 0 for every request. With this we wanted to identify the time that was needed just for the REST call itself.
+* An **empty** model: This is not actually a Random Forest model, but will rather just return a 0 for every request. With this we wanted to identify the time that was needed just for the REST call itself.
 * A **small** model: A Random Forest with an ensemble of 50 Decision Trees
 * A **large** model: A Random Forest with an ensemble of 500 Decision Trees
 
-For the *Inference as a Service* solutions, we ran the benchmark test with 2000 prediction requests each. All of the following statistical values are measured in seconds:![Sequential Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialTable.png)
+For the *Inference as a Service* solutions, we ran the benchmark test with 2000 prediction requests each. The raw results of the benchmark test can be found in the [benchmarkResults directory](https://github.com/IndustrialML/SmartApplicationDoku/tree/master/benchmarkResults).
+
+All of the following statistical values are measured in seconds:
+
+![Sequential Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialTable.png)
 
 ![Sequential Benchmarktest graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/SequentialGraphs.png)
 
@@ -454,24 +458,9 @@ For the *Inference as a Service* solutions, we ran the benchmark test with 2000 
 
 All values were measured on an Azure [E2S_V3 Standard](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/images/0_createVM_3.PNG) instance running a Microsoft Machine Learning Server 9.2.1 on Ubuntu 16.04 VM. More information about the VM setup can be found [here](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Configure_Azure_Linux_VM.md).
 
-Notice that the values for the RESTful API of the Microsoft Machine Learning Server standard and realtime are not trustworthy yet and those solutions are still in process.
-
 
 We ran another benchmark test for the *Model as a Service* solution of a Random Forest, to roughly compare the performances. The test results provided were created, using a Python's `sklearn` Random Forest that was parsed to PMML (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)) and later consumed in Java, using the JPMML-Evaluator library (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)). You can view the source code [here](https://github.com/IndustrialML/Python2Java/tree/master/MaschineLearning4J/src/main/java/RandomForest).
 
-Note that the results are measured in miliseconds this time, so the performance is significantly faster (as expected):
+Note that the results are measured in miliseconds this time, so the performance for running the prediction directly in Java is significantly faster (as expected):
 
 ![Java Benchmark results](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/JavaTable.png)
-
-## Glossar
-* API
-* Decision Tree
-* Deep Learning
-* Linear Regression
-* Machine Learning
-* Machine Learning Process (preprocessing->training/fitting->predicting)
-* Model
-* Neural Network
-* Random Forest
-* REST
-* RESTful API
