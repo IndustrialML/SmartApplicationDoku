@@ -7,6 +7,25 @@ We will try to get an insight of the possible challenges and problems, when buil
 
 In the following we will present you with multiple possible solutions on how to use a trained machine learning model from R or Python in a production environment like Java. In the end we will conclude our studies with the results of our benchmark test to identify the preformances of the different solutions.
 
+## Table of contents
+[*Transfer a machine learning model between technologies*](https://github.com/IndustrialML/SmartApplicationDoku#transfer-a-machine-learning-model-between-technologies):
+* [Use a model that was trained in R](https://github.com/IndustrialML/SmartApplicationDoku#use-a-model-that-was-trained-in-r-) 
+	* [Inference as a Service](https://github.com/IndustrialML/SmartApplicationDoku#inference-as-a-service)
+        * [Plumber](https://github.com/IndustrialML/SmartApplicationDoku#plumber)
+        * [OpenCPU](https://github.com/IndustrialML/SmartApplicationDoku#opencpu)
+        * [Microsoft Machine Learning Server](https://github.com/IndustrialML/SmartApplicationDoku#microsoft-machine-learning-server)
+     * [Model as a Service](https://github.com/IndustrialML/SmartApplicationDoku#model-as-a-service) 
+* [Use a model that was trained in Python](https://github.com/IndustrialML/SmartApplicationDoku#use-a-model-that-was-trained-in-python)
+    * [Saving and exporting a model](https://github.com/IndustrialML/SmartApplicationDoku#saving-and-exporting-a-model)
+    	* [Neural Network](https://github.com/IndustrialML/SmartApplicationDoku#neural-network)
+    	* [Random Forest](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)
+    * [Inference as a Service](https://github.com/IndustrialML/SmartApplicationDoku#inference-as-a-service-1)
+    	* [Neural Network](https://github.com/IndustrialML/SmartApplicationDoku#neural-network-1)
+    	* [Random Forest](https://github.com/IndustrialML/SmartApplicationDoku#random-forest-1)
+    * [Model as a Service](https://github.com/IndustrialML/SmartApplicationDoku#model-as-a-service-1)
+    	* [Neural Network](https://github.com/IndustrialML/SmartApplicationDoku#neural-network-2)
+    	* [Random Forest](https://github.com/IndustrialML/SmartApplicationDoku#random-forest-2)
+    * [Comparison and benchmark analysis](https://github.com/IndustrialML/SmartApplicationDoku#comparison-and-benchmark-analysis)
 
 ## Transfer a machine learning model between technologies
 As you might have experienced, the technology stack used by data analysts will most certainly not match with what is used for building big applications in a business environment. The data analyst might use a technology such as R or Python to explore data, extract features and train a machine learning algorithm, but the software engineer wants to build his enterprise application with Java EE, Spring or other technologies. Therefore one of the big challenges can be to enable the enterprise application to use the trained machine learning model for predictions.
