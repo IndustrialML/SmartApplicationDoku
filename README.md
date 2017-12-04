@@ -3,7 +3,7 @@
 ## Abstract
 This document has been created as a collaborative effort by Sonja Gassner, Veronica Pohl and Matthias Leopold for internal use at the Zuehlke Engineering AG. It will be most interesting for those who are about to start a project, where the objective involves building a business application around a machine learning task.
 
-We will try to get an insight of the possible challenges and problems, when building a *smart application* for production that solves a complex machine learning problem, involving both software engineers and data analysts. Due to external conditions we were not able to cover the full process cycle but rather focused on the technological problem that is involved in this field.
+We will try to get an insight of the possible challenges and problems, when building a *smart application* for production that solves a complex machine learning problem, involving both software engineers and data analysts. Due to external conditions we were not able to cover the full process cycle but rather focused on the technological problem that is involved in this task.
 
 In the following we will present you with multiple possible solutions on how to use a trained machine learning model from R or Python in a production environment like Java. In the end we will conclude our studies with the results of our benchmark test to identify the preformances of the different solutions.
 
@@ -25,7 +25,7 @@ In the following we will present you with multiple possible solutions on how to 
     * [Model as a Service](https://github.com/IndustrialML/SmartApplicationDoku#model-as-a-service-1)
     	* [Neural Network](https://github.com/IndustrialML/SmartApplicationDoku#neural-network-2)
     	* [Random Forest](https://github.com/IndustrialML/SmartApplicationDoku#random-forest-2)
-    * [Comparison and benchmark analysis](https://github.com/IndustrialML/SmartApplicationDoku#comparison-and-benchmark-analysis)
+* [Comparison and benchmark analysis](https://github.com/IndustrialML/SmartApplicationDoku#comparison-and-benchmark-analysis)
 
 ## Transfer a machine learning model between technologies
 As you might have experienced, the technology stack used by data analysts will most certainly not match with what is used for building big applications in a business environment. The data analyst might use a technology such as R or Python to explore data, extract features and train a machine learning algorithm, but the software engineer wants to build his enterprise application with Java EE, Spring or other technologies. Therefore one of the big challenges can be to enable the enterprise application to use the trained machine learning model for predictions.
@@ -469,9 +469,12 @@ All of the following statistical values are measured in seconds:
 
 All values were measured on an Azure [E2S_V3 Standard](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/images/0_createVM_3.PNG) instance running a Microsoft Machine Learning Server 9.2.1 on Ubuntu 16.04 VM. More information about the VM setup can be found [here](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Configure_Azure_Linux_VM.md).
 
+Two of our gained insights are not represented in the above statistics, so it is important to keep them in mind. It was very difficult to retreive proper test results for `OpenCPU` and the `Microsoft Machine Learning Servers`, both standard and realtime. The MSMLServers struggled with the concurrent benchmark test, because in order to being allowed to acces the REST API, you would have to be authenticated. And authenticating with the same (admin) credentials at the same time, resulted in the rejection of the request. The other thing to keep in mind is, that `OpenCPU` sometimes just refuses the request, due to a not further investigated cause.
 
-We ran another benchmark test for the *Model as a Service* solution of a Random Forest, to roughly compare the performances. The test results provided were created, using a Python's `sklearn` Random Forest that was parsed to PMML (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)) and later consumed in Java, using the JPMML-Evaluator library (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)). You can view the source code [here](https://github.com/IndustrialML/Python2Java/tree/master/MaschineLearning4J/src/main/java/RandomForest).
+Additionally to the presented test of the REST APIs, we ran another benchmark test for the *Model as a Service* solution of a Random Forest, to roughly compare the performances. The test results provided were created, using a Python's `sklearn` Random Forest that was parsed to PMML (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)) and later consumed in Java, using the JPMML-Evaluator library (as shown [earlier](https://github.com/IndustrialML/SmartApplicationDoku#random-forest)). You can view the source code [here](https://github.com/IndustrialML/Python2Java/tree/master/MaschineLearning4J/src/main/java/RandomForest).
 
-Note that the results are measured in miliseconds this time, so the performance for running the prediction directly in Java is significantly faster (as expected):
+Note that these results are measured in miliseconds this time, so the performance for running the prediction directly in Java is significantly faster (as expected):
 
 ![Java Benchmark results](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/JavaTable.png)
+
+This concludes our project, we hope you gained some insights on the possibilites to use a trained machine learning model for production and thank you for reading this document.
