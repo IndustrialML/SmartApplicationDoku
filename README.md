@@ -1,22 +1,12 @@
 # How to build a smart application
 
-//anmerkung: schreibe für einen Freund, hilf dem Leser sein problem zu lösen
-
 ## Abstract
-//todo: motiviere Leser das dokument zu lesen und zeige wie viel arbeit wir investiert haben
-
 This document has been created as a collaborative effort by Sonja Gassner, Veronica Pohl and Matthias Leopold for internal use at the Zuehlke Engineering AG. It will be most interesting for those who are about to start a project, where the objective involves building a business application around a machine learning task.
 
-We will try to get an insight of the possible challenges and problems, when building a *smart application* for production that solves a complex machine learning problem, involving both software engineers and data analysts. Moreover, we will  focus on the collaboration between those two groups in particular and try to point out the communication difficulties.
+We will try to get an insight of the possible challenges and problems, when building a *smart application* for production that solves a complex machine learning problem, involving both software engineers and data analysts. Due to external conditions we were not able to cover the full process cycle but rather focused on the technological problem that is involved in this field.
 
-We define a *smart application* as an application which includes the following tasks (amongst others):
-* Fetching data from different sources
-* Preprocessing the data
-* Training a machine learning model
-* Building a stable business application around the model and use it for predictions
-* Being able to easily replace the prediction model with new model versions
+In the following we will present you with multiple possible solutions on how to use a trained machine learning model from R or Python in a production environment like Java. In the end we will conclude our studies with the results of our benchmark test to identify the preformances of the different solutions.
 
-In the following we want to demonstrate a full process cycle, helping you to prepare for your own project.
 
 ## Transfer a machine learning model between technologies
 As you might have experienced, the technology stack used by data analysts will most certainly not match with what is used for building big applications in a business environment. The data analyst might use a technology such as R or Python to explore data, extract features and train a machine learning algorithm, but the software engineer wants to build his enterprise application with Java EE, Spring or other technologies. Therefore one of the big challenges can be to enable the enterprise application to use the trained machine learning model for predictions.
@@ -455,6 +445,8 @@ All of the following statistical values are measured in seconds:
 ![Concurrent Benchmarktest table](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/ConcurrentTable.png)
 
 ![Concurrent Benchmarktest graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/ConcurrentGraphs.png)
+
+![Grouped Medians graphs](https://github.com/IndustrialML/SmartApplicationDoku/blob/master/images/GroupedGraphs.png)
 
 All values were measured on an Azure [E2S_V3 Standard](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/images/0_createVM_3.PNG) instance running a Microsoft Machine Learning Server 9.2.1 on Ubuntu 16.04 VM. More information about the VM setup can be found [here](https://github.com/IndustrialML/R_RESTApi/blob/master/docs/Configure_Azure_Linux_VM.md).
 
